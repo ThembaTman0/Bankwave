@@ -1,19 +1,49 @@
 package com.bankwave.accounts.dto;
 
-import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
 public class ErrorResponseDto {
+    private String path;
+    private HttpStatus status;
+    private String message;
+    private LocalDateTime timestamp;
 
-    private String apiPath;
+    // ✅ Add this constructor
+    public ErrorResponseDto(String path, HttpStatus status, String message, LocalDateTime timestamp) {
+        this.path = path;
+        this.status = status;
+        this.message = message;
+        this.timestamp = timestamp;
+    }
 
-    private HttpStatus errorCode;
+    // Getters & setters
+    public String getPath() {
+        return path;
+    }
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-    private String errorMessage;
+    public HttpStatus getStatus() {
+        return status;
+    }
+    public void setStatus(HttpStatus status) {
+        this.status = status;
+    }
 
-    private LocalDateTime errorTime;
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 }

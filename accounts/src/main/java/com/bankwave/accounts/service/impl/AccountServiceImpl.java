@@ -1,0 +1,88 @@
+package com.bankwave.accounts.service.impl;
+
+import com.bankwave.accounts.constants.AccountsConstants;
+import com.bankwave.accounts.dto.AccountsDto;
+import com.bankwave.accounts.dto.CustomerDto;
+import com.bankwave.accounts.entity.Accounts;
+import com.bankwave.accounts.entity.Customer;
+import com.bankwave.accounts.exception.ResourceNotFoundException;
+import com.bankwave.accounts.mapper.AccountsMapper;
+import com.bankwave.accounts.mapper.CustomerMapper;
+import com.bankwave.accounts.repository.AccountsRepository;
+import com.bankwave.accounts.repository.CustomerRepository;
+import com.bankwave.accounts.service.IAccountsService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Random;
+
+@Service
+@AllArgsConstructor
+public class AccountServiceImpl implements IAccountsService {
+
+    private AccountsRepository accountsRepository;
+    private CustomerRepository customerRepository;
+
+
+    /**
+     * @param customerDto -CustomerDto Object
+     */
+    @Override
+    public void createAccount(CustomerDto customerDto) {
+        Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
+
+        //Check if customer already exists
+        Optional<Customer> optinalCustomer = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
+        if (optinalCustomer.isPresent()) {
+            throw new RuntimeException("Customer already exists with the following mobile number " + customerDto.getMobileNumber());
+        }
+
+        customer.setCreatedAt(LocalDateTime.now());
+        customer.setCreatedBy("Anonymous");
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        accountsRepository.save(createNewAccount(savedCustomer));
+
+    }
+
+
+
+    /**
+     * @param customer -Customer Object
+     * @return the new account details
+     */
+    private Accounts createNewAccount(Customer customer) {
+        Accounts newAccount = new Accounts();
+        newAccount.setCustomerId(customer.getCustomerId());
+        long randomAccNumber = 1000000000L + new Random().nextInt(900000000);
+
+        newAccount.setAccountNumber(randomAccNumber);
+        newAccount.setAccountType(AccountsConstants.SAVINGS);
+        newAccount.setBranchAddress(AccountsConstants.ADDRESS);
+        newAccount.setCreatedAt(LocalDateTime.now());
+        newAccount.setCreatedBy("Anonymous");
+        return newAccount;
+    }
+
+    /**
+     * @param mobileNumber -Input Mobile Number
+     * @retun Account Details based on given mobilenUmber
+     */
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+        Customer customer=customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                ()->new ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
+        );
+
+        Accounts accounts=accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                ()->new ResourceNotFoundException("Account","customerId",customer.getCustomerId().toString())
+        );
+
+        CustomerDto customerDto=CustomerMapper.mapToCustomerDto(customer,new CustomerDto());
+        customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+        return customerDto;
+    }
+}
