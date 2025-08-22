@@ -18,7 +18,7 @@ public class AccountsController {
 
     @Autowired
     private IAccountsService iAccountsService;
-
+    //Note access api via postman on http://localhost:8080/api/create
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@RequestBody CustomerDto customerDto) {
         iAccountsService.createAccount(customerDto);
