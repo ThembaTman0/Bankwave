@@ -14,4 +14,6 @@ public interface IAccountsService {
      * @retun Account Details based on given mobilenUmber
      */
     CustomerDto fetchAccount(String mobileNumber);
+
+    boolean updateAccount(CustomerDto customerDto);
 }
