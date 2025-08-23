@@ -8,6 +8,7 @@ public interface IAccountsService {
      * @param customerDto -CustomerDto Object
      */
     void createAccount(CustomerDto customerDto);
+
     /**
      *
      * @param mobileNumber -Input Mobile Number
@@ -15,5 +16,18 @@ public interface IAccountsService {
      */
     CustomerDto fetchAccount(String mobileNumber);
 
+    /**
+     *
+     * @param customerDto -Input customerDto
+     * @retun boolean check if data update is successful
+     */
     boolean updateAccount(CustomerDto customerDto);
+
+    /**
+     *
+     * @param mobileNumber -Input mobileNumber
+     * @retun boolean check if data deleted is successful
+     */
+    boolean deleteAccount(String mobileNumber);
+
 }
