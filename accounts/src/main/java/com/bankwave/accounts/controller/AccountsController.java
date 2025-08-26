@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AccountsController {
 
-    @Autowired
     private IAccountsService iAccountsService;
     //Note access api via postman on http://localhost:8080/api/create
     @PostMapping("/create")
