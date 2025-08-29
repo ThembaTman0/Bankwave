@@ -1,49 +1,39 @@
 package com.bankwave.accounts.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+
+@Data
+@AllArgsConstructor
+@Schema(
+        name = "ErrorResponse",
+        description = "Schema to hold error response information"
+)
 public class ErrorResponseDto {
-    private String path;
-    private HttpStatus status;
-    private String message;
-    private LocalDateTime timestamp;
 
-    // ✅ Add this constructor
-    public ErrorResponseDto(String path, HttpStatus status, String message, LocalDateTime timestamp) {
-        this.path = path;
-        this.status = status;
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+    @Schema(
+            description = "API path invoked by client"
+    )
+    private  String apiPath;
 
-    // Getters & setters
-    public String getPath() {
-        return path;
-    }
-    public void setPath(String path) {
-        this.path = path;
-    }
+    @Schema(
+            description = "Error code representing the error happened"
+    )
+    private HttpStatus errorCode;
 
-    public HttpStatus getStatus() {
-        return status;
-    }
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
+    @Schema(
+            description = "Error message representing the error happened"
+    )
+    private  String errorMessage;
 
-    public String getMessage() {
-        return message;
-    }
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    @Schema(
+            description = "Time representing when the error happened"
+    )
+    private LocalDateTime errorTime;
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
 }
