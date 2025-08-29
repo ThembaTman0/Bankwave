@@ -60,7 +60,7 @@ This project demonstrates expertise and hands-on application of the skills sough
 
 ### Run Locally
 ```bash
-cd section2/accounts
+cd bankwave/accounts
 mvn spring-boot:run
 ```
 
