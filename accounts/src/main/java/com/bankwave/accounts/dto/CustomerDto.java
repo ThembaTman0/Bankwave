@@ -23,7 +23,7 @@ public class CustomerDto {
     private String name;
 
     @Schema(
-            description = "Email address of the customer", example = "tutor@bankwave.com"
+            description = "Email address of the customer", example = "thembatman0@gmail.com"
     )
     @NotEmpty(message = "Email address can not be a null or empty")
     @Email(message = "Email address should be a valid value")
