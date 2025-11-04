@@ -1,5 +1,5 @@
 #Start with a base iamge containion java runtime
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk-slim
 
 LABEL maintainer="Themba Ngobeni <https://github.com/thembatman0>"
 
