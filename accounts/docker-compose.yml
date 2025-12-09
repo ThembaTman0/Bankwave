@@ -8,6 +8,8 @@ services:
       resources:
         limits:
           memory: 700m
+    networks:
+      - bankwave
   loans:
     image: "thembatman/loans:latest"
     container_name: loans-ms
@@ -17,6 +19,8 @@ services:
       resources:
         limits:
           memory: 700m
+    networks:
+      - bankwave
   cards:
     image: "thembatman/cards:latest"
     container_name: cards-ms
@@ -26,3 +30,8 @@ services:
       resources:
         limits:
           memory: 700m
+    networks:
+      - bankwave
+networks:
+  bankwave:
+    driver: "bridge"
