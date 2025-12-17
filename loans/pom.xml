@@ -5,7 +5,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring Boot parent manages dependency versions -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -22,11 +21,12 @@
 
     <properties>
         <java.version>21</java.version>
+        <jib.version>3.4.4</jib.version>
     </properties>
 
     <dependencies>
 
-        <!-- Spring Boot starters -->
+        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -47,6 +47,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- DB -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -55,14 +62,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Database -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- OpenAPI / Swagger UI -->
+        <!-- OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -89,7 +89,7 @@
     <build>
         <plugins>
 
-            <!-- Compiler Plugin -->
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -107,15 +107,29 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot Buildpacks Plugin -->
+            <!-- Spring Boot (repackage) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.5.5</version>
+            </plugin>
+
+            <!-- ✅ Google Jib -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
                 <configuration>
-                    <image>
-                        <name>thembatman/loans:latest</name>
-                    </image>
+                    <to>
+                        <image>thembatman/loans</image>
+                        <tags>
+                            <tag>latest</tag>
+                            <tag>v1</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
                 </configuration>
             </plugin>
 

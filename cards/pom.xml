@@ -21,6 +21,7 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<jib.version>3.4.4</jib.version>
 	</properties>
 
 	<dependencies>
@@ -61,7 +62,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Swagger / OpenAPI -->
+		<!-- Swagger -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -76,7 +77,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Testing -->
+		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -88,7 +89,7 @@
 	<build>
 		<plugins>
 
-			<!-- Compiler with Lombok -->
+			<!-- Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -106,15 +107,29 @@
 				</configuration>
 			</plugin>
 
-			<!-- Buildpacks / Docker Image -->
+			<!-- Spring Boot plugin (still needed for repackaging) -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>3.5.5</version>
+			</plugin>
+
+			<!-- ✅ Google Jib -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib.version}</version>
 				<configuration>
-					<image>
-						<name>thembatman/cards:latest</name>
-					</image>
+					<to>
+						<image>thembatman/cards</image>
+						<tags>
+							<tag>latest</tag>
+							<tag>v1</tag>
+						</tags>
+					</to>
+					<container>
+						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+					</container>
 				</configuration>
 			</plugin>
 
