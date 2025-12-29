@@ -5,7 +5,7 @@
 **Bankwave** is a foundational **Spring Boot microservices system** that models core banking domains such as **accounts, loans, and cards**.  
 The project focuses on **getting the fundamentals right**: clean service boundaries, RESTful APIs, isolated data ownership, and production-style code structure.
 
-This repository reflects the system **up to the foundational microservices stage**—before introducing Spring Cloud components. The emphasis is on understanding **how microservices should be built**, not just how frameworks wire them together.
+This repository reflects the system **up to the foundational microservices stage** before introducing Spring Cloud components. The emphasis is on understanding **how microservices should be built**, not just how frameworks wire them together.
 
 While the work was guided by structured learning material, the implementation has been **adapted and refined** to demonstrate real-world engineering practices expected from a professional Java developer.
 
@@ -24,8 +24,8 @@ Each service:
 - Is a **standalone Spring Boot application**
 - Exposes **RESTful APIs**
 - Owns its **own database**
-- Can be started, stopped, and developed independently
-- Has no hidden runtime dependencies on other services
+- Can be built, tested, and deployed independently
+- Is designed to scale horizontally in containerized environments
 
 ---
 
@@ -43,7 +43,7 @@ At this stage, the project deliberately avoids Spring Cloud abstractions to ensu
 
 ---
 
-## Technology Stack (Up to Episode 80)
+## Technology Stack
 
 - **Java 11**
 - **Spring Boot**
@@ -72,9 +72,9 @@ This structure enforces **clear responsibility boundaries** and mirrors patterns
 
 ---
 
-## Accounts Microservice – Bankwave
+## Microservice – Bankwave
 
-The **Accounts Service** demonstrates how a real banking domain service should be structured and implemented.
+The **Services** demonstrates how a real banking domain service should be structured and implemented.
 
 ### Core Capabilities
 
@@ -146,7 +146,7 @@ Each service runs on its configured port as defined in `application.properties`.
 
 ---
 
-## Current Scope (Up to Episode 80)
+## Current Scope
 
 ### Included
 
