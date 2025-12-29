@@ -1,115 +1,207 @@
-# Bankwave - Accounts Microservice
+# Bankwave – Spring Boot Microservices (Foundational Phase)
 
 ## Overview
-Bankwave is a **Spring Boot microservice** designed to manage **account-related functionality** such as creating, retrieving, and updating account details. It forms part of a modular microservices architecture, built to demonstrate scalability, resilience, and deployment readiness in modern enterprise environments.
 
-This project was adapted and extended from a structured microservices learning path, but tailored to showcase **production-grade practices** and align with enterprise job requirements.
+**Bankwave** is a foundational **Spring Boot microservices system** that models core banking domains such as **accounts, loans, and cards**.  
+The project focuses on **getting the fundamentals right**: clean service boundaries, RESTful APIs, isolated data ownership, and production-style code structure.
 
----
+This repository reflects the system **up to the foundational microservices stage**—before introducing Spring Cloud components. The emphasis is on understanding **how microservices should be built**, not just how frameworks wire them together.
 
-## Key Highlights
-This project demonstrates expertise and hands-on application of the skills sought in enterprise Java roles:
-
-### Core Java & Spring Boot
-- Developed in **Java 8+** with clean, modular, and maintainable code.
-- Deep use of **Spring Boot** for REST APIs, dependency injection, configuration management, and service orchestration.
-- **Hibernate/JPA** integration for persistence with entity relationships and repository patterns.
-
-### Web & API Experience
-- Exposes **RESTful web services** for account operations.
-- Designed with extensibility for **SOAP-based integration** (pluggable service interfaces).
-- Uses **XML/JSON** as data interchange formats with clear DTO separation.
-- Follows **SDLC best practices**: requirements → design → build → test → deploy.
-
-### Enterprise Deployment & Build Tools
-- **Maven** build lifecycle with profiles for dev/prod.
-- Dockerized microservice for **containerization**.
-- **Kubernetes manifests** for orchestration and scaling in clustered environments.
-- Deployable to **OpenShift** or other enterprise-grade Kubernetes platforms.
-- CI/CD ready with **Atlassian Suite (Bitbucket/Jenkins/Bamboo)** integrations.
-
-### Middleware & Messaging (Extensible)
-- Built to support **JMS** queues (Tibco EMS, ActiveMQ, or RabbitMQ) for async communication.
-- Scheduling support extendable with **Quartz/Flux** for batch jobs.
-
-### DevOps & System Engineering
-- Container images built using Spring Boot buildpacks.
-- Deployable to **Linux environments** with Apache or LVS.
-- Agile-driven: small, iterative, and deployable increments.
-- Supports monitoring extensions with Micrometer/Prometheus.
+While the work was guided by structured learning material, the implementation has been **adapted and refined** to demonstrate real-world engineering practices expected from a professional Java developer.
 
 ---
 
-## Project Features
-- **Account Management Service**: REST endpoints to manage account data.
-- **Spring Data JPA & Hibernate**: ORM mapping and database persistence.
-- **Exception Handling & Validation**: Centralized error handling for clean responses.
-- **Docker Integration**: Packaged as a self-contained container for portability.
-- **Kubernetes Deployment**: Scalable and fault-tolerant service orchestration.
-- **Cloud Native Design**: Built with stateless principles and microservice readiness.
+## Services
+
+| Service          | Responsibility                | Port |
+|------------------|-------------------------------|------|
+| Accounts Service | Customer account management   | 8080 |
+| Loans Service    | Loan management               | 8090 |
+| Cards Service    | Card management               | 9000 |
+
+Each service:
+
+- Is a **standalone Spring Boot application**
+- Exposes **RESTful APIs**
+- Owns its **own database**
+- Can be started, stopped, and developed independently
+- Has no hidden runtime dependencies on other services
 
 ---
 
-## Getting Started
+## Architectural Approach
+
+This system follows **core microservices principles** commonly used in fintech and enterprise environments:
+
+- **Service isolation** – one business capability per service
+- **Database-per-service** – no shared schemas or cross-service joins
+- **Loose coupling** – services interact only via APIs
+- **Stateless design** – services do not maintain session state
+- **Explicit configuration** – everything required to run a service is visible
+
+At this stage, the project deliberately avoids Spring Cloud abstractions to ensure the **underlying architecture is well understood**.
+
+---
+
+## Technology Stack (Up to Episode 80)
+
+- **Java 11**
+- **Spring Boot**
+- **Spring Web (REST)**
+- **Spring Data JPA**
+- **Hibernate**
+- **Maven**
+- **H2 / MySQL**
+- **Basic Docker usage (image building concepts)**
+
+---
+
+## Project Structure
+
+Each microservice follows a consistent and maintainable structure:
+
+    ├── controller   → REST endpoints and request handling
+    ├── service      → Business logic and transactions
+    ├── repository   → Data access using Spring Data JPA
+    ├── entity       → JPA domain models
+    ├── dto          → API request / response models
+    ├── exception    → Centralized exception handling
+    └── config       → Application configuration
+
+This structure enforces **clear responsibility boundaries** and mirrors patterns used in real production systems.
+
+---
+
+## Accounts Microservice – Bankwave
+
+The **Accounts Service** demonstrates how a real banking domain service should be structured and implemented.
+
+### Core Capabilities
+
+- Create customer accounts
+- Retrieve account details
+- Update account information
+- Enforce validation and business rules at service boundaries
+
+---
+
+## REST API Design
+
+- RESTful endpoints with meaningful resource naming
+- HTTP status codes used correctly for success and failure cases
+- DTOs used to avoid leaking internal domain models
+- Validation applied to incoming requests
+- Consistent error responses using centralized exception handling
+
+APIs can be tested using:
+
+- Postman
+- curl
+- Browser (GET endpoints)
+
+---
+
+## Persistence & Data Management
+
+- Spring Data JPA repositories for clean data access
+- Hibernate used for ORM mapping
+- Each service owns its database schema
+- No cross-service database access
+- Transaction boundaries defined at the service layer
+
+This aligns with **data ownership rules used in regulated financial systems**.
+
+---
+
+## Quality & Engineering Practices
+
+The project prioritizes **code quality and clarity** over unnecessary complexity.
+
+Practices applied include:
+
+- Centralized exception handling for predictable API errors
+- Input validation to fail fast on invalid data
+- Clear separation between API, business logic, and persistence
+- Externalized configuration using properties and profiles
+- Meaningful logging to support debugging
+- Readable, intention-revealing method and class names
+- Minimal but sufficient abstractions
+
+The goal is to produce services that are **easy to understand, safe to change, and suitable for long-term maintenance**.
+
+---
+
+## Running the Services Locally
 
 ### Prerequisites
+
 - Java 11+
-- Maven 3.6+
-- Docker
-- Kubernetes Cluster (Minikube, Docker Desktop, or OpenShift)
+- Maven
 
-### Run Locally
-```bash
-cd bankwave/accounts
-mvn spring-boot:run
-```
+### Start a Service
 
-### Build & Run with Docker
-```bash
-mvn spring-boot:build-image -Dspring-boot.build-image.imageName=bankwave/accounts
+    mvn spring-boot:run
 
-docker run -p 8080:8080 bankwave/accounts
-```
-
-### Deploy to Kubernetes
-```bash
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-```
+Each service runs on its configured port as defined in `application.properties`.
 
 ---
 
-## Architecture
-- **Spring Boot** for application framework
-- **REST APIs** for communication
-- **Hibernate/JPA** for persistence
-- **Docker** for containerization
-- **Kubernetes** for orchestration & scaling
-- **Atlassian CI/CD** compatibility for automated build/deploy
+## Current Scope (Up to Episode 80)
+
+### Included
+
+- Independent Spring Boot microservices
+- REST APIs
+- JPA/Hibernate persistence
+- Database-per-service pattern
+- DTO-based API contracts
+- Centralized exception handling
+- Foundational Docker concepts
+
+### Not Yet Included
+
+- Service discovery
+- API gateway
+- Centralized configuration
+- Inter-service communication patterns
+- Security (OAuth2/JWT)
+- Resilience patterns
+- Distributed tracing
+- Kubernetes deployments
+
+These are planned for later phases once the core architecture is solid.
 
 ---
 
-## Future Enhancements
-- **Swagger/OpenAPI** for auto-generated API documentation.
-- **Resilience4j** for fault tolerance.
-- **Centralized Config Management** with Spring Cloud Config.
-- **Distributed Tracing** with Sleuth + Zipkin.
-- **Authentication/Authorization** with OAuth2 & JWT.
-- **Angular/React Presentation Layer** for UI integration.
+## Planned Next Steps
+
+- Spring Cloud Config
+- Service discovery
+- API Gateway
+- Inter-service communication
+- Fault tolerance and resilience
+- Observability and metrics
+- Container orchestration concepts
 
 ---
 
-## Why This Project Stands Out
-This project highlights **direct alignment with enterprise requirements**:
-- Real-world **Spring Boot + Hibernate** microservice.
-- Fully **containerized with Docker** and **orchestrated with Kubernetes**.
-- Deployable to **JBoss/WebLogic** or containerized environments.
-- Integrates **REST, XML, and SOAP services** principles.
-- Follows **DevOps pipelines, Agile practices, and SDLC discipline**.
-- Ready for **scaling in a complex, high-pressure environment**.
+## Why This Repository Matters
+
+This project demonstrates:
+
+- Strong understanding of **microservices fundamentals**
+- Clean Spring Boot service design
+- Awareness of **fintech and enterprise constraints**
+- Discipline in not over-engineering early
+- A solid base for building scalable systems
+
+It reflects how real systems are built: **start simple, get the boundaries right, then evolve responsibly**.
 
 ---
 
-## Conclusion
-Bankwave - Accounts Microservice demonstrates not only technical proficiency in **Java, Spring Boot, Hibernate, Docker, and Kubernetes** but also readiness for real-world enterprise challenges: high availability, scalability, and deployment in demanding environments.
+## Final Notes
 
+This repository represents a **foundational microservices implementation**, intentionally focused on correctness and clarity.  
+It serves as a reliable base for moving toward a full cloud-native architecture while maintaining strong engineering fundamentals.
+
+---
